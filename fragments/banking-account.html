@@ -15,8 +15,19 @@
                             <i class="fa {{ accountDetails.topReasons.icon }}"></i>
                             <span class="caption-subject  bold uppercase" ng-bind="accountDetails.topReasons.title"></span>
                         </div>
+						<ui-select ng-model="person.selected" theme="bootstrap" ng-disabled="disabled" style="min-width: 300px;">
+							<ui-select-match placeholder="Select a person in the list or search his name/age...">{{$select.selected.name}}</ui-select-match>
+							<ui-select-choices repeat="person in people | propsFilter: {name: $select.search, age: $select.search}">
+							  <div ng-bind-html="person.name | highlight: $select.search"></div>
+							  <small>
+								email: {{person.email}}
+								age: <span ng-bind-html="''+person.age | highlight: $select.search"></span>
+							  </small>
+							</ui-select-choices>
+						</ui-select>
+						
                     </div>
-                    <div class="portlet-body" style="max-height:115px; min-height:115px;" data-init-slimscroll="true">
+                    <div class="portlet-body" style="max-height:115px; min-height:115px;">
                         <ul class="top-reasons">
                             <li ng-repeat="list in accountDetails.topReasons.list">
                                 <div class="icon">
