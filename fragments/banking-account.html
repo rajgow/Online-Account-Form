@@ -1,0 +1,109 @@
+<section class="page-section">
+        <div ng-include='"fragments/breadcrumbs.html"'></div>
+        <div class="row hide">
+            <div id="home" ng-click="home()" class="company-logo-body">
+                <img src="images/ABC.png">
+                <span>Bank</span>
+            </div>
+            <a class="btn btn-green pull-right mar-right-15px" type="submit" href="#/form/personal/new">APPLY NOW</a>
+        </div>
+        <div class="row mar-top-20px">
+            <div class="col-md-6">
+                <div class="portlet">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa {{ accountDetails.topReasons.icon }}"></i>
+                            <span class="caption-subject  bold uppercase" ng-bind="accountDetails.topReasons.title"></span>
+                        </div>
+                    </div>
+                    <div class="portlet-body" style="max-height:115px; min-height:115px;" data-init-slimscroll="true">
+                        <ul class="top-reasons">
+                            <li ng-repeat="list in accountDetails.topReasons.list">
+                                <div class="icon">
+                                    <i class="fa {{ accountDetails.topReasons.listIcon}}"></i>
+                                </div>
+                                <div class="desc" ng-bind="list"></div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="row text-center mar-top-20px" ng-hide="accountDetails.topReasons.list.length > 0"><div class="block-spinner-bar"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div></div>
+                </div>
+                <div class="portlet">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa {{ accountDetails.features.icon }}"></i>
+                            <span class="caption-subject  bold uppercase" ng-bind="accountDetails.features.title"></span>
+                        </div>
+                    </div>
+                    <div class="portlet-body" style="max-height:220px; min-height:220px;" data-init-slimscroll="true">
+                        <div class="item-list">
+                            <div class="item" ng-repeat="list in accountDetails.features.list">
+                                <div class="item-head">
+                                    <div class="icon">
+                                        <i class="fa {{ list.icon }}"></i>
+                                    </div>
+                                    <div class="desc" ng-bind="list.title"></div>
+                                </div>
+                                <div class="item-body">
+                                    <div class="table-wrapper">
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th>Type</th>
+                                                <th>Description</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="innerList in list.list">
+                                                    <td ng-bind="innerList.type"></td>
+                                                    <td ng-bind="innerList.desc"></td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row text-center mar-top-20px" ng-hide="accountDetails.features.list.length > 0"><div class="block-spinner-bar"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="portlet">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa {{ accountDetails.benefits.icon }}"></i>
+                            <span class="caption-subject bold uppercase" ng-bind="accountDetails.benefits.title"></span>
+                        </div>
+                    </div>
+                    <div class="portlet-body" style="max-height:457px; min-height:457px;" data-init-slimscroll="true">
+                        <div class="item-list" ng-repeat="list in accountDetails.benefits.list">
+                            <div class="item">
+                                <div class="item-head">
+                                    <div class="icon">
+                                        <i class="fa {{ list.icon}}"></i>
+                                    </div>
+                                    <div class="desc" ng-bind="list.title"></div>
+                                </div>
+                                <div class="item-body">
+                                    <ul class="top-reasons">
+                                        <li ng-repeat="innerList in list.list">
+                                            <div class="icon">
+                                                <i class="fa {{ accountDetails.benefits.innerListIcon}}"></i>
+                                            </div>
+                                            <div class="desc" ng-bind="innerList"></div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row text-center mar-top-20px" ng-hide="accountDetails.benefits.list.length > 0"><div class="block-spinner-bar"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div></div>
+                </div>
+            </div>
+        </div>
+        <div class="row text-center">
+            <a class="btn btn-green" type="submit" href="#/form/personal/new">APPLY NOW</a>
+        </div>
+</section>
