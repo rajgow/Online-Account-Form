@@ -13,14 +13,14 @@
             <div class="portlet-body">
                 <form class="form-horizontal" name="application.form" novalidate>
                     <div class="form-body">
-                        <div class="form-group {{ (application.form.$submitted || application.form[formField.modal].$touched) && ( application.form[formField.modal].$error.required || application.form[formField.modal].$invalid ) ? 'has-error' : '' }}" ng-repeat="formField in formFields">
+							<div class="form-group {{ (application.form.$submitted || application.form[formField.modal].$touched) && ( application.form[formField.modal].$error.required || application.form[formField.modal].$invalid ) ? 'has-error' : '' }}" ng-repeat="formField in formFields">
                             <label class="col-md-3 control-label" ng-if="formField.title != ''">
                                 <span ng-bind="formField.title"></span>
                                 <span ng-if="formField.required" class="font-green">*</span>
                             </label>
                             <div class="{{ formField.type == 'R' || formField.type == 'C' ? 'col-sm-offset-3 col-md-7' : 'col-md-4' }}">
                                 <input ng-if="formField.type == 'T' || formField.type == 'N'" ng-blur="updateFormCompletion(application.form)" type="{{ formField.type == 'T'  ? 'text' : 'number' }}" placeholder="Please Enter" name="{{ formField.modal  }}" ng-model="customer[formField.modal]" ng-required="{{formField.required}}" class="form-control">
-                                <ui-select ng-if="formField.type == 'D'"  theme="bootstrap" ng-change="updateFormCompletion(application.form)" name="{{ formField.modal  }}" ng-model="customer[formField.modal]" required/>
+                                <ui-select ng-if="formField.type == 'D'"  theme="bootstrap"/>
                                     <ui-select-match placeholder="Please Select">{{$select.selected.decode}}</ui-select-match>
                                     <ui-select-choices repeat="cities in formField.values | propsFilter: {code: $select.search, decode: $select.search}">
                                         <div ng-bind-html="cities.decode | highlight: $select.search"></div>
