@@ -16,16 +16,7 @@
                             <span class="caption-subject  bold uppercase" ng-bind="accountDetails.topReasons.title"></span>
                         </div>
                     </div>
-                    <div class="portlet-body" style="max-height:115px; min-height:115px;" >
-					
-								<div class="form-group">
-							<ui-select theme="bootstrap" ng-change="updateFormCompletion(application.form)" name="test" ng-model="customer.test" required/>
-										<ui-select-match placeholder="Please Select">{{$select.selected.name}}</ui-select-match>
-										<ui-select-choices repeat="cities in people | propsFilter: {name: $select.search, age: $select.search}">
-											<div ng-bind-html="cities.name | highlight: $select.search"></div>
-										</ui-select-choices>
-									</ui-select>
-						</div>	
+                    <div class="portlet-body" style="max-height:115px; min-height:115px;" data-init-slimscroll="true">
                         <ul class="top-reasons">
                             <li ng-repeat="list in accountDetails.topReasons.list">
                                 <div class="icon">

@@ -20,9 +20,12 @@
                             </label>
                             <div class="{{ formField.type == 'R' || formField.type == 'C' ? 'col-sm-offset-3 col-md-7' : 'col-md-4' }}">
                                 <input ng-if="formField.type == 'T' || formField.type == 'N'" ng-blur="updateFormCompletion(application.form)" type="{{ formField.type == 'T'  ? 'text' : 'number' }}" placeholder="Please Enter" name="{{ formField.modal  }}" ng-model="customer[formField.modal]" ng-required="{{formField.required}}" class="form-control">
-                                <div ng-if="formField.type == 'D'">
-									
-								</div>
+                                <ui-select ng-if="formField.type == 'D'"  theme="bootstrap" ng-change="updateFormCompletion(application.form)" name="{{ formField.modal  }}" ng-model="customer[formField.modal]" required/>
+                                    <ui-select-match placeholder="Please Select">{{$select.selected.decode}}</ui-select-match>
+                                    <ui-select-choices repeat="cities in formField.values | propsFilter: {code: $select.search, decode: $select.search}">
+                                        <div ng-bind-html="cities.decode | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
                                 <textarea ng-if="formField.type == 'TA'" ng-blur="updateFormCompletion(application.form)" placeholder="Enter text" name="{{ formField.modal  }}" ng-model="customer[formField.modal]" ng-required="{{formField.required}}" class="form-control"></textarea>
                                 <div class="radio-list" ng-if="formField.type == 'R'">
                                     <label class="radio-inline" for="moreAcc_{{$index}}" ng-repeat="value in formField.values">
@@ -42,7 +45,6 @@
                                 </span>
                             </div>
                         </div>
-						
                     </div>
                     <div class="form-actions">
                         <div class="row">
@@ -53,14 +55,6 @@
                         </div>
                     </div>
                 </form>
-				<div class="form-group">
-							<ui-select theme="bootstrap" ng-change="updateFormCompletion(application.form)" name="test" ng-model="customer.test" required/>
-										<ui-select-match placeholder="Please Select">{{$select.selected.name}}</ui-select-match>
-										<ui-select-choices repeat="cities in people | propsFilter: {name: $select.search, age: $select.search}">
-											<div ng-bind-html="cities.name | highlight: $select.search"></div>
-										</ui-select-choices>
-									</ui-select>
-						</div>	
                 <div class="circle-wrapper" ng-show="showFormCompletion">
                     <div id="form-complete-circle"></div>
                     <div class="circle-label cssFade" ng-show="circleRendered">Form Completion</div>
