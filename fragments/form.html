@@ -44,9 +44,9 @@
                         </div>
 						<div class="form-group">
 							<ui-select theme="bootstrap" ng-change="updateFormCompletion(application.form)" name="test" ng-model="customer.test" required/>
-										<ui-select-match placeholder="Please Select">{{$select.selected.decode}}</ui-select-match>
-										<ui-select-choices repeat="cities in formFields[3].values | propsFilter: {code: $select.search, decode: $select.search}">
-											<div ng-bind-html="cities.decode | highlight: $select.search"></div>
+										<ui-select-match placeholder="Please Select">{{$select.selected.name}}</ui-select-match>
+										<ui-select-choices repeat="cities in people | propsFilter: {name: $select.search, age: $select.search}">
+											<div ng-bind-html="cities.name | highlight: $select.search"></div>
 										</ui-select-choices>
 									</ui-select>
 						</div>	
