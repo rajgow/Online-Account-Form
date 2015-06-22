@@ -20,7 +20,7 @@
                             </label>
                             <div class="{{ formField.type == 'R' || formField.type == 'C' ? 'col-sm-offset-3 col-md-7' : 'col-md-4' }}">
                                 <input ng-if="formField.type == 'T' || formField.type == 'N'" ng-blur="updateFormCompletion(application.form)" type="{{ formField.type == 'T'  ? 'text' : 'number' }}" placeholder="Please Enter" name="{{ formField.modal  }}" ng-model="customer[formField.modal]" ng-required="{{formField.required}}" class="form-control">
-                                <ui-select theme="bootstrap"/>
+                                <ui-select theme="bootstrap" ng-modal="test"/>
                                     <ui-select-match placeholder="Please Select">{{$select.selected.decode}}</ui-select-match>
                                     <ui-select-choices repeat="cities in formField.values | propsFilter: {code: $select.search, decode: $select.search}">
                                         <div ng-bind-html="cities.decode | highlight: $select.search"></div>
