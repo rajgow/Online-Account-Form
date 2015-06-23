@@ -19,20 +19,20 @@
                                 <span ng-if="formField.required" class="font-green">*</span>
                             </label>
                             <div class="{{ formField.type == 'R' || formField.type == 'C' ? 'col-sm-offset-3 col-md-7' : 'col-md-4' }}">
-                                <input ng-if="formField.type == 'T' || formField.type == 'N'" ng-blur="updateFormCompletion(application.form)" type="{{ formField.type == 'T'  ? 'text' : 'number' }}" placeholder="Please Enter" name="{{ formField.modal  }}" ng-model="customer[formField.modal]" ng-required="{{formField.required}}" class="form-control">
-                                <select ng-if="formField.type == 'D'"  ng-change="updateFormCompletion(application.form)" ng-selectize  placeholder="Please Select" class="form-control" name="{{ formField.modal  }}" ng-model="customer[formField.modal]" required ng-options="cities.decode as cities.decode for cities in formField.values ">
+                                <input ng-if="formField.type == 'T' || formField.type == 'N'" ng-blur="updateFormCompletion(application.form)" type="{{ formField.type == 'T'  ? 'text' : 'number' }}" placeholder="Please Enter" name="{{ formField.modal  }}" ng-model="customer[formField.modal]" ng-required="{{formField.required}}" class="form-control" tabindex="{{ $index + 1 }}">
+                                <select ng-if="formField.type == 'D'"  ng-change="updateFormCompletion(application.form)" ng-selectize  placeholder="Please Select" class="form-control" name="{{ formField.modal  }}" ng-model="customer[formField.modal]" required ng-options="cities.decode as cities.decode for cities in formField.values " tabindex="{{ $index + 1 }}">
                                     <option value="">Please Select</option>
                                 </select>
-                                <textarea ng-if="formField.type == 'TA'" ng-blur="updateFormCompletion(application.form)" placeholder="Enter text" name="{{ formField.modal  }}" ng-model="customer[formField.modal]" ng-required="{{formField.required}}" class="form-control"></textarea>
+                                <textarea ng-if="formField.type == 'TA'" ng-blur="updateFormCompletion(application.form)" placeholder="Enter text" name="{{ formField.modal  }}" ng-model="customer[formField.modal]" ng-required="{{formField.required}}" class="form-control" tabindex="{{ $index + 1 }}"></textarea>
                                 <div class="radio-list" ng-if="formField.type == 'R'">
                                     <label class="radio-inline" for="moreAcc_{{$index}}" ng-repeat="value in formField.values">
-                                        <input type="radio" ng-value="value.decode" id="moreAcc_{{$index}}" name="{{ formField.modal  }}" ng-model="customer[formField.modal]" ng-change="updateFormCompletion(application.form)" ng-required="{{formField.required}}">
+                                        <input type="radio" ng-value="value.decode" id="moreAcc_{{$index}}" name="{{ formField.modal  }}" ng-model="customer[formField.modal]" ng-change="updateFormCompletion(application.form)" ng-required="{{formField.required}}" tabindex="{{ $index + 1 }}">
                                         {{ value.decode }}
                                     </label>
                                 </div>
                                 <div class="checkbox-list" ng-if="formField.type == 'C'">
                                     <label class="checkbox-inline" ng-repeat="value in formField.values">
-                                        <input type="checkbox" ng-value="value.decode" name="{{ formField.modal  }}" ng-model="customer[formField.modal]" ng-change="updateFormCompletion(application.form)" ng-required="{{formField.required}}">
+                                        <input type="checkbox" ng-value="value.decode" name="{{ formField.modal  }}" ng-model="customer[formField.modal]" ng-change="updateFormCompletion(application.form)" ng-required="{{formField.required}}" tabindex="{{ $index + 1 }}">
                                         {{ value.decode }}
                                     </label>
                                 </div>
