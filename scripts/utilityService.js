@@ -199,7 +199,7 @@
       /* This will update the current time to passed element */
       utilityService.updateDateTime = function(element) {
          var dateString = new Date().toString(),
-			 indexString = navigator.appName == "Microsoft Internet Explorer" ? 'UTC' : ''GMT;
+			 indexString = navigator.appName == "Microsoft Internet Explorer" ? 'UTC' : 'GMT';
 		 element.html(dateString.slice(0, dateString.indexOf(indexString)));
       };
 
