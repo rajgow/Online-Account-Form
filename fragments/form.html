@@ -11,7 +11,7 @@
                 </div>
             </div>
             <div class="portlet-body">
-                <form class="form-horizontal" name="application.form" novalidate>
+                <form class="form-horizontal" name="application.form" novalidate ng-show="formFields.length > 0">
                     <div class="form-body">
                         <div class="form-group {{ (application.form.$submitted || application.form[formField.modal].$touched) && ( application.form[formField.modal].$error.required || application.form[formField.modal].$invalid ) ? 'has-error' : '' }}" ng-repeat="formField in formFields">
                             <label class="col-md-3 control-label" ng-if="formField.title != ''">
@@ -20,12 +20,9 @@
                             </label>
                             <div class="{{ formField.type == 'R' || formField.type == 'C' ? 'col-sm-offset-3 col-md-7' : 'col-md-4' }}">
                                 <input ng-if="formField.type == 'T' || formField.type == 'N'" ng-blur="updateFormCompletion(application.form)" type="{{ formField.type == 'T'  ? 'text' : 'number' }}" placeholder="Please Enter" name="{{ formField.modal  }}" ng-model="customer[formField.modal]" ng-required="{{formField.required}}" class="form-control">
-                                <ui-select ng-if="formField.type == 'D'"  theme="bootstrap" ng-change="updateFormCompletion(application.form)" name="{{ formField.modal  }}" ng-model="customer[formField.modal]" required/>
-                                    <ui-select-match placeholder="Please Select">{{$select.selected.decode}}</ui-select-match>
-                                    <ui-select-choices repeat="cities in formField.values | propsFilter: {code: $select.search, decode: $select.search}">
-                                        <div ng-bind-html="cities.decode | highlight: $select.search"></div>
-                                    </ui-select-choices>
-                                </ui-select>
+                                <select ng-if="formField.type == 'D'"  ng-change="updateFormCompletion(application.form)" ng-selectize  placeholder="Please Select" class="form-control" name="{{ formField.modal  }}" ng-model="customer[formField.modal]" required ng-options="cities.decode as cities.decode for cities in formField.values ">
+                                    <option value="">Please Select</option>
+                                </select>
                                 <textarea ng-if="formField.type == 'TA'" ng-blur="updateFormCompletion(application.form)" placeholder="Enter text" name="{{ formField.modal  }}" ng-model="customer[formField.modal]" ng-required="{{formField.required}}" class="form-control"></textarea>
                                 <div class="radio-list" ng-if="formField.type == 'R'">
                                     <label class="radio-inline" for="moreAcc_{{$index}}" ng-repeat="value in formField.values">
@@ -50,7 +47,7 @@
                         <div class="row">
                             <div class="col-md-offset-3 col-md-9">
                                 <button class="btn default" type="button" ng-disabled="application.formSubmitted" ng-click="resetForm(application.form)">Reset</button>
-                                <button class="btn btn-green" type="submit" ng-disabled="application.formSubmitted" ng-click="submit(application.form.$valid)">Save & Continue</button>
+                                <button class="btn btn-green" type="submit" ng-disabled="application.formSubmitted" ng-click="submit(application.form.$valid)" ng-bind="formDetails.step == 3 ? 'Submit' : 'Save & Continue'"></button>
                             </div>
                         </div>
                     </div>

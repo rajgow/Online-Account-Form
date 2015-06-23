@@ -451,7 +451,7 @@ input[type="number"] {
     color: rgb(28, 175, 154);
     float : left;
 }
-.item {
+.item-group {
     border-bottom: 1px solid rgb(241, 244, 247);
     padding: 10px 0px;
 }
@@ -512,14 +512,20 @@ input[type="number"] {
 }
 
 /* ui-select CSS */
-.ui-select-bootstrap .ui-select-choices-row.active > a {
+.selectize-dropdown .active {
     background-color: #1caf9a;
     color: #fff;
 }
-.dropdown-menu {
+.selectize-dropdown {
     border: 1px solid #1caf9a !important;
 }
+.selectize-input.focus, .selectize-input:hover, .selectize-control:hover {
+    border-color : #1caf9a;
+}
 
-.ui-select-bootstrap i.caret {
-    color: #1caf9a;
+.selectize-control.single .selectize-input::after {
+    border-color: #1caf9a transparent transparent;
+}
+.selectize-control.single .selectize-input.dropdown-active::after {
+    border-color: transparent transparent #1caf9a;
 }

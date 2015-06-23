@@ -1,4 +1,4 @@
- appConfig.service('utilityService', ['$http', 'appconstants', "appvalues", function( $http, appconstants, appvalues ) {
+ appConfig.service('utilityService', ['$http', 'appconstants', "appvalues", "$location", function( $http, appconstants, appvalues, $location ) {
       var utilityService = {};
 
       /* To check passed value is null or not, returns true if passed value is null */
@@ -39,8 +39,8 @@
       utilityService.createCircle = function(percentage, id, $scope) {
          var count = 0;
          if($("#"+id).length > 0) {
-            utilityService.formCircle =   Circles.create({id : id, radius:60, value:percentage, maxValue:100, width:10, colors:["rgb(241, 243, 250)","#1caf9a"], text:function(value){return parseInt(value) + '%';}});
-                $scope.circleRendered = true; $("#home").click();
+             utilityService.formCircle =   Circles.create({id : id, radius:60, value:percentage, maxValue:100, width:10, colors:["rgb(241, 243, 250)","#1caf9a"], text:function(value){return parseInt(value) + '%';}});
+             $scope.circleRendered = true; $("#home").click();
          } else if (count <= 5) {
             count++;
             setTimeout( function() { utilityService.createCircle(percentage, id, $scope) }, 500);
@@ -84,7 +84,8 @@
                 document.body.style.cursor = "";
                 successCB(data);
           }).error(function (data,config) {
-
+                document.body.style.cursor = "";
+                $location.path("/application-failure").replace();
           });
       };
 
@@ -95,20 +96,23 @@
                    addThis -> If you need add more breadcrumbs, pass the index of the breadcrumb to be added
        */
       utilityService.updateBreadcrumbs = function($scope, state, activeIndex, addThis) {
-         var breadcrumbs = angular.copy(appvalues.breadcrumbs).slice(0,state);
+         utilityService.updateScopeWithLabels($scope, "breadcrumbs", { method : "GET", url : appconstants.parseURILabels + appconstants.breadcrumbsKey }, function(data) {
+              breadcrumbs = angular.copy(data.breadcrumbs).slice(0,state);
 
-         /* If we need to add any specific breadcrumb at last */
-         if(addThis) {
-            breadcrumbs.push(angular.copy(appvalues.breadcrumbs[addThis]))
-         }
+              /* If we need to add any specific breadcrumb at last */
+              if(addThis) {
+                 breadcrumbs.push(angular.copy(data.breadcrumbs[addThis]))
+              }
 
-         /* This will make breadcrumb active, based on passed index*/
-         activeIndex ? breadcrumbs[activeIndex].active = true : '';
+              /* This will make breadcrumb active, based on passed index*/
+              activeIndex ? breadcrumbs[activeIndex].active = true : '';
 
-         $scope.breadcrumbs = breadcrumbs;
+              $scope.breadcrumbs = breadcrumbs;
 
-         /* This method is being called on all pages, so this makes sure too remove spinner on successful loads */
-         $scope.updateSpinner("hide");
+              /* This method is being called on all pages, so this makes sure too remove spinner on successful loads */
+              $scope.updateSpinner("hide");
+
+         });
       };
 
 
@@ -151,14 +155,21 @@
       *  @param : customer -> Customer object
                   applicationForm -> Angular form,
       */
-      utilityService.resetFields = function(customer, applicationForm) {
+      utilityService.resetFields = function(customer, applicationForm, $scope) {
           for(var key in customer) {
 
               /* to make sure that the key is part of the current form */
-              if(applicationForm[key]) {
+              if(applicationForm[key] && customer[key] != "") {
                   customer[key] = "";
               }
           }
+
+          /* To Reset selectize Fields*/
+          $("select").each(function(index, ele) {
+
+              /* To make this process async, so that it wont clashes any inprogess $digest or $apply operation */
+              setTimeout(function() { ele.selectize.setValue("") },0);
+          });
       };
 
      /* This call will update the landing page information, fist it will check appvalues for the information,
@@ -192,9 +203,18 @@
       };
 
       /* This will initialize slim scroll */
-      utilityService.initSlimScroll = function() {
-            $('[data-init-slimscroll]').slimscroll({ height: "100%", color : "#d7dce2", railColor : "#eaeaea"});
-      };
+     utilityService.initSlimScroll = function() {
+           $('[data-init-slimscroll]').slimscroll({ height: "100%", color : "#d7dce2", railColor : "#eaeaea"});
+     };
+
+     /*  Converts passed element into custom select */
+     utilityService.renderSelectize = function(element) {
+        $(element).selectize ({
+            onBlur : function(event) {
+               "dispatchEvent" in this.$input[0] ? this.$input[0].dispatchEvent(new Event('blur')) : this.$input[0].fireEvent("onblur");
+            }
+        })
+     };
 
       /* this being called on page load, and it is correct place to initialize any plugins, custom codes etc. on load
       *  Currently it will initialize window resize event and also updates scope with current device width */

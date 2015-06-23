@@ -11,7 +11,7 @@
         *  it toggles differently as per screen size
         */
         $scope.toggleMenu = function() {
-            $(window).width() < 768 ? $scope.showMenu = !$scope.showMenu : $scope.menuType = $scope.menuType == 'short' ? '' : 'short';
+            $(window).width() < 768 ? $scope.showMenu = !$scope.showMenu : $scope.menuType = $scope.menuType == 'short' ? 'big' : 'short';
         };
 
 
@@ -52,24 +52,45 @@
     });
 
     appConfig.controller('FormCtrl', function($scope, $state, $location, utilityService, appvalues,appconstants) {
-        $scope.formDetails = appconstants[$state.current.name]; $scope.accountId = $state.params.accountId; $scope.application = {}; $scope.customer = { step : 1 };
-        //$scope.formFields = angular.copy(appvalues.formFields[ $scope.formDetails.formName ]);
 
-        utilityService.updateScopeWithLabels($scope, "formFields", { method : "GET", url : appconstants.parseURILabels + appconstants.formFieldsKey }, function(formFields) {
-            $scope.formFields = formFields[$scope.formDetails.formName]
-        });
+        /* Holds form details, like form name, step no, etc.  */
+        $scope.formDetails = appconstants[$state.current.name];
+
+        /* Application ID  */
+        $scope.accountId = $state.params.accountId;
+
+        /* This contains application form, for the angular validations  */
+        $scope.application = {};
+
+        /* Customer object, by default it has step 1  */
+        $scope.customer = { step : 1 };
+
+
+        /* gets the form current labels, and form fields information as well */
+        $scope.getLabels = function() {
+            utilityService.updateScopeWithLabels($scope, "formFields", { method : "GET", url : appconstants.parseURILabels + appconstants.formFieldsKey }, function(formFields) {
+                $scope.formFields = formFields[$scope.formDetails.formName]
+            });
+        }
 
         /* It will reset the circle on load, as form changed, so that it will create again */
         utilityService.formCircle = undefined;
 
+
+        /* Means it is fresh application */
         if($scope.accountId == 'new') {
             utilityService.updateBreadcrumbs($scope, 2, 1);
+            $scope.getLabels();
             utilityService.createCircle(0, "form-complete-circle", $scope)
-        } else if(!utilityService.isNull($scope.accountId)) {
+        }
+
+        /* Means Application has already created, it brings the application details */
+        else if(!utilityService.isNull($scope.accountId)) {
             $scope.application.formSubmitted = true;
             utilityService.callService( { method : "GET", url : appconstants.parseURIApplications + $scope.accountId } , function(data) {
                 $scope.customer = data.customer; $scope.application.formSubmitted = false;
                 utilityService.updateBreadcrumbs($scope, $scope.customer.step + 2, $scope.formDetails.step);
+                $scope.getLabels();
                 setTimeout(function() { $scope.updateFormCompletion($scope.application.form) },500);
             });
         }
@@ -96,7 +117,7 @@
                 /* Service call */
                 utilityService.callService(request, function(data) {
                      $scope.updateSpinner("hide"); $scope.accountId = data.objectId || $scope.accountId
-                     $scope.formDetails.step == 3 ? $location.path("/form/success/"+$scope.accountId) : $location.path("/form/"+ appconstants[ $scope.formDetails.step + 1] + $scope.accountId).replace();
+                     $location.path("/form/"+ $scope.formDetails.nextStep + $scope.accountId).replace();
                 });
             }
         };
@@ -109,7 +130,7 @@
         /* this will reset the form */
         $scope.resetForm = function(applicationForm) {
             /* Resets all the fields in the form */
-            utilityService.resetFields($scope.customer, applicationForm);
+            utilityService.resetFields($scope.customer, applicationForm, $scope);
 
             /* this will set the form, that control hasn't been touched */
             applicationForm.$setUntouched();
@@ -128,6 +149,12 @@
         *  refer utilityService.updateBreadcrumbs function, to more about these parameters
         */
         utilityService.updateBreadcrumbs($scope, 1, 1, 4);
+    });
+    appConfig.controller('FailureCtrl', function($scope,$state, utilityService,appvalues,appconstants) {
+        /* This call updates the breadcrumbs,
+        *  refer utilityService.updateBreadcrumbs function, to more about these parameters
+        */
+        utilityService.updateBreadcrumbs($scope, 1, 1, 5);
     });
 
 
