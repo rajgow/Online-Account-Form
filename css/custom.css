@@ -1,31 +1,38 @@
+ @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,600,700);
 
-  /* @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,600,700); */
-  @import url(libs/icheck-green.css);
-
-/* Theme Dark Blue */
-.theme-darkblue  .main-menu > li > a {
+/* Theme green */
+.theme-green  .main-menu > li > a {
     border-top: 1px solid #3d4957;
 }
-.theme-darkblue .menu li > a {
+.theme-green .menu li > a {
     color: #b4bcc8;
 }
-.theme-darkblue .main-menu > li.active > a {
+.theme-green .main-menu > li.active > a {
     background: #1caf9a none repeat scroll 0 0;
     border-top-color: transparent;
     color: #ffffff;
 }
-.theme-darkblue .menu li.active i {
+.theme-green .menu li.active i {
     color: #ffffff;
 }
-.theme-darkblue .page-header {
+.theme-green .page-header {
     background: #2b3643 none repeat scroll 0 0;
 }
-.theme-darkblue {
+.theme-green {
      background-color: #364150;
      color: rgb(136, 136, 136);
 }
-.theme-darkblue .menu li.active .selected-arrow {
+.theme-green .menu li.active .selected-arrow {
     border-right: 12px solid #fff;
+}
+.theme-green .btn-main {
+    background: rgb(28, 175, 154) none repeat scroll 0 0;
+    color: rgb(255, 255, 255);
+}
+.theme-green .btn-default:hover, .theme-green .btn-default:active, .theme-green .btn-default:focus, .theme-green .btn-main:hover, .theme-green .btn-main:active, .theme-green .btn-main:focus {
+    border-color: #1caf9a !important;
+    background-color: #e8f7f5 !important;
+    color : rgb(136, 136, 136) !important;
 }
 
 /* Utilities */
@@ -300,17 +307,6 @@ input[type="number"] {
      margin-top: 8px;
 }
 
-/* btn related CSS */
-.btn-green {
-    background: rgb(28, 175, 154) none repeat scroll 0 0;
-    color: rgb(255, 255, 255);
-}
-.btn-default:hover, .btn-default:active, .btn-default:focus, .btn-green:hover, .btn-green:active, .btn-green:focus {
-    border-color: #1caf9a !important;
-    background-color: #e8f7f5 !important;
-    color : rgb(136, 136, 136) !important;
-}
-
 /* Animation related CSS */
 .page-spinner-bar > div, .block-spinner-bar > div {
     background: #20c5ad none repeat scroll 0 0 !important;
@@ -494,6 +490,7 @@ input[type="number"] {
     right: 50px;
     top: 75px;
     background : #fff;
+    z-index : 1;
 }
 .tablet .col-sm-offset-3 {
     margin-left : 0;

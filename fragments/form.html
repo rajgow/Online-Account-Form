@@ -19,7 +19,7 @@
                                 <span ng-if="formField.required" class="font-green">*</span>
                             </label>
                             <div class="{{ formField.type == 'R' || formField.type == 'C' ? 'col-sm-offset-3 col-md-7' : 'col-md-4' }}">
-                                <input ng-if="formField.type == 'T' || formField.type == 'N'" ng-blur="updateFormCompletion(application.form)" type="{{ formField.type == 'T'  ? 'text' : 'number' }}" placeholder="Please Enter" name="{{ formField.modal  }}" ng-model="customer[formField.modal]" ng-required="{{formField.required}}" class="form-control" tabindex="{{ $index + 1 }}">
+                                <input ng-if="formField.type == 'T' || formField.type == 'N'" ng-blur="updateFormCompletion(application.form)" type="{{ formField.type == 'T'  ? 'text' : 'number' }}" placeholder="Please Enter" name="{{ formField.modal  }}" min="{{ formField.modal == 'age' ? 10 : 1 }}" max="{{ formField.modal == 'age' ? 99 : ''}}" ng-model="customer[formField.modal]" ng-required="{{formField.required}}" class="form-control" tabindex="{{ $index + 1 }}">
                                 <select ng-if="formField.type == 'D'"  ng-change="updateFormCompletion(application.form)" ng-selectize  placeholder="Please Select" class="form-control" name="{{ formField.modal  }}" ng-model="customer[formField.modal]" required ng-options="cities.decode as cities.decode for cities in formField.values " tabindex="{{ $index + 1 }}">
                                     <option value="">Please Select</option>
                                 </select>
@@ -47,7 +47,7 @@
                         <div class="row">
                             <div class="col-md-offset-3 col-md-9">
                                 <button class="btn default" type="button" ng-disabled="application.formSubmitted" ng-click="resetForm(application.form)">Reset</button>
-                                <button class="btn btn-green" type="submit" ng-disabled="application.formSubmitted" ng-click="submit(application.form.$valid)" ng-bind="formDetails.step == 3 ? 'Submit' : 'Save & Continue'"></button>
+                                <button class="btn btn-main" type="submit" ng-disabled="application.formSubmitted" ng-click="submit(application.form.$valid)" ng-bind="formDetails.step == 3 ? 'Apply' : 'Save & Continue'"></button> <!-- Changed the label from Next to Save & Continue, As i believe it best suits -->
                             </div>
                         </div>
                     </div>

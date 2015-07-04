@@ -37,7 +37,7 @@
         utilityService.init($scope);
     });
 
-    appConfig.controller('BankingAccCtrl', function($scope,$state,utilityService,appvalues,appconstants) {
+    appConfig.controller('BankingAccCtrl', function($scope,$state,utilityService,sharedModal,appvalues,appconstants) {
 
          /* This call updates the breadcrumbs,
          *  refer utilityService.updateBreadcrumbs function for more information
@@ -49,26 +49,31 @@
 
          /* To get latest information of ABC Banking Account */
          utilityService.updateScopeWithLabels($scope, "accountDetails", { method : "GET", url : appconstants.parseURILabels + appconstants.accountDetailsKey });
+
+         /* Resetting Customer Object */
+         sharedModal.updateCustomer(new Object());
     });
 
-    appConfig.controller('FormCtrl', function($scope, $state, $location, utilityService, appvalues,appconstants) {
+    appConfig.controller('FormCtrl', function($scope, $state, $location, utilityService, sharedModal, appvalues,appconstants) {
+
+        $scope.customer = sharedModal.getCustomer();
 
         /* Holds form details, like form name, step no, etc.  */
         $scope.formDetails = appconstants[$state.current.name];
 
-        /* Application ID  */
-        $scope.accountId = $state.params.accountId;
 
         /* This contains application form, for the angular validations  */
         $scope.application = {};
 
         /* Customer object, by default it has step 1  */
-        $scope.customer = { step : 1 };
+        $scope.customer.step = $scope.customer.step ||  0;
 
 
         /* gets the form current labels, and form fields information as well */
         $scope.getLabels = function() {
+            $scope.updateSpinner("show");
             utilityService.updateScopeWithLabels($scope, "formFields", { method : "GET", url : appconstants.parseURILabels + appconstants.formFieldsKey }, function(formFields) {
+                $scope.updateSpinner("hide");
                 $scope.formFields = formFields[$scope.formDetails.formName]
             });
         }
@@ -77,23 +82,11 @@
         utilityService.formCircle = undefined;
 
 
-        /* Means it is fresh application */
-        if($scope.accountId == 'new') {
-            utilityService.updateBreadcrumbs($scope, 2, 1);
-            $scope.getLabels();
-            utilityService.createCircle(0, "form-complete-circle", $scope)
-        }
+        /* This will render breadCrumbs, Labels and Circle with Percentage */
+        utilityService.updateBreadcrumbs($scope, $scope.customer.step + 2, $scope.formDetails.step);
+        $scope.getLabels();
+        setTimeout(function() { $scope.updateFormCompletion($scope.application.form) },500);
 
-        /* Means Application has already created, it brings the application details */
-        else if(!utilityService.isNull($scope.accountId)) {
-            $scope.application.formSubmitted = true;
-            utilityService.callService( { method : "GET", url : appconstants.parseURIApplications + $scope.accountId } , function(data) {
-                $scope.customer = data.customer; $scope.application.formSubmitted = false;
-                utilityService.updateBreadcrumbs($scope, $scope.customer.step + 2, $scope.formDetails.step);
-                $scope.getLabels();
-                setTimeout(function() { $scope.updateFormCompletion($scope.application.form) },500);
-            });
-        }
 
         /* Calls on submit, if data is valid on the form, calls the service to save the data,
          * Then transits to next step, if final step reached, then transits to success page
@@ -103,22 +96,27 @@
                 /* sets the highest step number reached so far */
                 $scope.customer.step = $scope.customer.step >= $scope.formDetails.step ? $scope.customer.step : $scope.customer.step + 1;
 
-                /*  sets the spinners on the screen & and disable the submit button to make sure that user is not clicking twice  */
-                $scope.updateSpinner("show"); $scope.application.formSubmitted = true;
+                /* Call parse Once reached final form */
+                if($scope.formDetails.step == 3) {
+                    /*  sets the spinners on the screen & and disable the submit button to make sure that user is not clicking twice  */
+                    $scope.updateSpinner("show"); $scope.application.formSubmitted = true;
 
-                var request = { method : "POST", url : appconstants.parseURIApplications, data : { customer : $scope.customer } };
+                    var request = { method : "POST", url : appconstants.parseURIApplications, data : { customer : $scope.customer } };
 
-                /* To make sure to update the data to previous application instead of creating the new application */
-                if($scope.accountId != "new") {
-                    request.method = "PUT";
-                    request.url += $scope.accountId;
+                    /* Service call */
+                    utilityService.callService(request, function(data) {
+                         $scope.updateSpinner("hide"); $scope.accountId = data.objectId || $scope.accountId
+                         sharedModal.updateCustomer(new Object());
+                         $location.path("/form/"+ $scope.formDetails.nextStep + $scope.accountId).replace();
+                    });
+                } else {
+                    /* Updating Customer Object */
+                    sharedModal.updateCustomer($scope.customer);
+
+                    /* Switching the form */
+                    $location.path("/form/"+ $scope.formDetails.nextStep);
                 }
 
-                /* Service call */
-                utilityService.callService(request, function(data) {
-                     $scope.updateSpinner("hide"); $scope.accountId = data.objectId || $scope.accountId
-                     $location.path("/form/"+ $scope.formDetails.nextStep + $scope.accountId).replace();
-                });
             }
         };
 
@@ -137,6 +135,8 @@
 
             /* this will set the form, that control hasn't been interacted with yet */
             applicationForm.$setPristine();
+
+            setTimeout(function() { $scope.updateFormCompletion(applicationForm) },10);
         };
     });
 

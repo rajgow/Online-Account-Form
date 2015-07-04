@@ -18,17 +18,17 @@
                 controller : 'BankingAccCtrl'
             })
             .state('personal',{
-                url : '/form/personal/:accountId',
+                url : '/form/personal',
                 templateUrl : 'fragments/application.html',
                 controller : 'FormCtrl'
             })
             .state('income',{
-                url : '/form/income/:accountId',
+                url : '/form/income',
                 templateUrl : 'fragments/application.html',
                 controller : 'FormCtrl'
             })
             .state('account',{
-                url : '/form/account/:accountId',
+                url : '/form/account',
                 templateUrl : 'fragments/application.html',
                 controller : 'FormCtrl'
             })
@@ -66,12 +66,12 @@
         parseURIApplications : "https://api.parse.com/1/classes/applications/",
         applicationId : "HnUsOaemBuSD01Qd302yK7mmflVZsrQqOxjJwETp",
         restAPIkey : "cgpDruLiMSjz1fCoS3KFpdCm3Vor9S65JALwBrzM",
-        personal : { step : 1, icon : "fa-user", formName : "personal", nextStep : "income/"},
-        income : { step : 2, icon : "fa-briefcase", formName : "income", nextStep : "account/"},
+        personal : { step : 1, icon : "fa-user", formName : "personal", nextStep : "income"},
+        income : { step : 2, icon : "fa-briefcase", formName : "income", nextStep : "account"},
         account : { step : 3, icon : "fa-inr", formName : "account", nextStep : "success/"},
-        1 : "personal/",
-        2 : "income/",
-        3 : "account/"
+        1 : "personal",
+        2 : "income",
+        3 : "account"
     });
 
 
@@ -98,6 +98,23 @@
             }
         }
     }]);
+
+
+    /* Angular Service to share modal between the views */
+    appConfig.service('sharedModal', function( ) {
+        var customer = {};
+
+        return {
+            updateCustomer : function(customerParam) {
+                customer = customerParam;
+            },
+                getCustomer : function() {
+                return angular.copy(customer);
+            }
+
+        };
+    });
+
 
     /* Angular Application Bootstrap */
     angular.element(document).ready(function() {
